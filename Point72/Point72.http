@@ -1,0 +1,6 @@
+@Point72_HostAddress = http://localhost:5271
+
+GET {{Point72_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
