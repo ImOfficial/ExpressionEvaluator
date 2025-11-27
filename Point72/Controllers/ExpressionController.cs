@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Point72.Models;
 using Point72.Repository;
+using Point72.Service;
 
 namespace Point72.Controllers
 {
@@ -18,8 +20,58 @@ namespace Point72.Controllers
             _expressionRepository = expressionRepository;
         }
 
+        [HttpPost]
+        [Route("Evaluate")]
+        public async Task<IActionResult> Evaluate([FromBody] ExpressionRequest request)
+        {
+            try
+            {
+                var expression = request.Expression;
+                var result = await ExpressionEvaluatorService.EvaluateExpressionAsync(expression);
+                var record = new Expressions
+                {
+                    Expression = expression,
+                    Result = result,
+                    CreatedAt = DateTime.UtcNow
+                };
+                await _expressionRepository.AddEpressionResultAsync(record);
+
+                return Ok(record);
+            }
+
+            catch (Exception ex) 
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
 
 
-        
+        [HttpGet]
+        [Route("GetByResult/{result}")]
+        public async Task<IActionResult> GetByResult(string result)
+        {
+            try
+            {
+                if (!double.TryParse(result, out double parsedResult))
+                {
+                    return BadRequest(new { Error = "Invalid result format. Please provide a valid number." });
+                }
+
+                var expressionList = await _expressionRepository.GetExpressionsByResultAsync(parsedResult);
+                return Ok(expressionList);
+            }
+            catch (Exception ex)
+            {
+                // I would like to use any logger service to log exception result while returning custome ecetion message for client in future
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
+
+
+
+
+
+
+
     }
 }
