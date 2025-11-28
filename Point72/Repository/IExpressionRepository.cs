@@ -4,7 +4,7 @@ namespace Point72.Repository
 {
     public interface IExpressionRepository
     {
-        Task<Expressions?> AddEpressionResultAsync(Expressions record);
+        Task<Expressions?> AddExpressionResultAsync(Expressions record);
         Task<List<Expressions>> GetExpressionsByResultAsync(double result);
         
     }

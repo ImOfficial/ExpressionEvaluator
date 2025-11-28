@@ -3,6 +3,6 @@
     public class ExpressionList
     {
         public String Result { get; set; }
-        public List<String> ExprssionList { get; set; } = String.Empty.Split(',').ToList();
+        public List<Expressions> ExprssionList { get; set; } = new List<Expressions>();
     }
 }

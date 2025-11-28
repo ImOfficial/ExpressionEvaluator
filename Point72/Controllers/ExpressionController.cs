@@ -26,6 +26,10 @@ namespace Point72.Controllers
         {
             try
             {
+                if(!ModelState.IsValid)
+                {
+                    return BadRequest(new { Error = "Invalid request data." });
+                }   
                 var expression = request.Expression;
                 var result = await ExpressionEvaluatorService.EvaluateExpressionAsync(expression);
                 var record = new Expressions
@@ -34,7 +38,7 @@ namespace Point72.Controllers
                     Result = result,
                     CreatedAt = DateTime.UtcNow
                 };
-                await _expressionRepository.AddEpressionResultAsync(record);
+                await _expressionRepository.AddExpressionResultAsync(record);
 
                 return Ok(record);
             }
@@ -50,6 +54,7 @@ namespace Point72.Controllers
         [Route("GetByResult/{result}")]
         public async Task<IActionResult> GetByResult(string result)
         {
+            // Model validation is pending here
             try
             {
                 if (!double.TryParse(result, out double parsedResult))
@@ -58,6 +63,7 @@ namespace Point72.Controllers
                 }
 
                 var expressionList = await _expressionRepository.GetExpressionsByResultAsync(parsedResult);
+                var record =  new ExpressionList { ExprssionList = expressionList, Result = result };
                 return Ok(expressionList);
             }
             catch (Exception ex)

@@ -11,7 +11,7 @@ namespace Point72.Repository
         {
             _context = context;
         }
-        public async Task<Expressions?> AddEpressionResultAsync(Expressions record)
+        public async Task<Expressions?> AddExpressionResultAsync(Expressions record)
         {
             try
             {
