@@ -63,8 +63,8 @@ namespace Point72.Controllers
                 }
 
                 var expressionList = await _expressionRepository.GetExpressionsByResultAsync(parsedResult);
-                var record =  new ExpressionList { ExprssionList = expressionList, Result = result };
-                return Ok(expressionList);
+                var record =  new ExpressionList { ExprssionList = expressionList, Result = parsedResult };
+                return Ok(record);
             }
             catch (Exception ex)
             {
